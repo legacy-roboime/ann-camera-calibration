@@ -47,33 +47,25 @@ int main(int argc, char **argv) {
   //
   char package[5];
   package[0] = 'a';
-  package[1] = '0';
-  package[2] = '0';
-  package[3] = '0';
-  package[4] = '0';
+  package[1] = 40;
+  package[2] = 40;
+  package[3] = 40;
+  package[4] = 40;
 
   int delay   = atoi(argv[1]),
       num_pkg = atoi(argv[2]), n = 0;
-
+  int vel;
+  int num = 0;
   while (n++ < num_pkg) {
+    std::cin >> vel;
     //input_file.read(&next_byte, 1);
-    serial_port.write(&package[0], 1);
-    serial_port.write(&package[1], 1);
-    serial_port.write(&package[2], 1);
-    serial_port.write(&package[3], 1);
-    serial_port.write(&package[4], 1);
-    package[4] ++;
-    if (package[4] == '9') { package[4] = '0'; package[3]++; }
-    if (package[3] == '9') { package[3] = '0'; package[2]++; }
-    if (package[2] == '9') { package[2] = '0'; package[1]++; }
-    if (package[1] == '9') {
-      package[1] = '0';
-      package[2] = '0';
-      package[3] = '0';
-      package[4] = '0';
+    for(int i = 0; i < 5; i++){
+      if(i!=0)
+        package[i]=vel;
+      serial_port.write(&package[i], 1);
     }
     // Print a '.' for every character read from the input file.
-    std::cerr << package << std::endl;
+    std::cerr << vel << " " << num++ << std::endl;
     usleep(delay);
   }
 
