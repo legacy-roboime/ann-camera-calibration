@@ -41,7 +41,9 @@ int main(int argc, char **argv) {
   int v[3];
  
   while (true) {
-    std::cin >> v[1] >> v[2] >> v[3];
+    for(int i=0; i<3; i++){
+      std::cin >> v[i];
+    }
     //input_file.read(&next_byte, 1);
     for(int i = 0; i< 3; i++){
       package[i+1] = v[i];
