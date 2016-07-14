@@ -4,7 +4,10 @@
 #include <cstdlib>
 
 #define CHECK_S(msg) \
-  if (!serial_port.good()) { std::cerr << "Error: " << msg << std::endl; exit(1); }
+  if (!serial_port.good()) {                    \
+    std::cerr << "Error: " << msg << std::endl; \
+    exit(1);                                    \
+  }
 
 #define SET_AND_CHECK(func, value, msg)                    \
   serial_port. func (LibSerial::SerialStreamBuf:: value ); \
@@ -41,9 +44,10 @@ int main(int argc, char **argv) {
   int v[3];
  
   while (true) {
-    for(int i=0; i<3; i++){
-      std::cin >> v[i];
-    }
+    for(int i=0; i<3; i++){ std::cin >> v[i]; }
+    //v[0] = 0;
+    //v[1] = 0;
+    //v[2] = 0;
     //input_file.read(&next_byte, 1);
     for(int i = 0; i< 3; i++){
       package[i+1] = v[i];
