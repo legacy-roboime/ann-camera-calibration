@@ -11,6 +11,7 @@
   CHECK_S(msg)
 
 LibSerial::SerialStream serial_port;
+int delay=1000000; // one second
 
 void init_serial() {
   // Open the serial port.
@@ -18,7 +19,7 @@ void init_serial() {
 
   serial_port.Open(SERIAL_PORT_DEVICE);
   CHECK_S("Could not open serial port")
-  //SET_AND_CHECK( SetBaudRate, BAUD_9600, "Could not set the baud rate."      );
+  SET_AND_CHECK( SetBaudRate, BAUD_9600, "Could not set the baud rate."      );
   SET_AND_CHECK( SetCharSize, CHAR_SIZE_8, "Could not set the character size." );
   SET_AND_CHECK( SetParity  , PARITY_NONE, "Could not disable the parity."     );
 
@@ -30,11 +31,30 @@ void init_serial() {
   CHECK_S("Could not use hardware flow control")
 }
 
+void send_data(char v_n, char v_t, char w) {
+  char package[5];
+  package[0] = 'a';
+  package[1] = v_n;
+  package[2] = v_t;
+  package[3] = w;
+  package[4] = 0;
+
+  serial_port.write(&package[0], 1);
+
+  usleep(delay);
+  serial_port.write(&package[1], 1);
+  serial_port.write(&package[2], 1);
+  serial_port.write(&package[3], 1);
+  serial_port.write(&package[4], 1);
+
+  std::cerr << package << std::endl;
+}
+
 // This example reads the contents of a file and writes the entire
 // file to the serial port one character at a time.
 int main(int argc, char **argv) {
-  if(argc < 3) {
-    printf(" Must provide at least two arg\n");
+  if(argc < 2) {
+    printf(" Usage: %s <delay>\n", argv[0]);
     exit(1);
   }
 
@@ -45,37 +65,18 @@ int main(int argc, char **argv) {
   //
   // serial_port.unsetf( std::ios_base::skipws ) ;
   //
-  char package[5];
-  package[0] = 'a';
-  package[1] = '0';
-  package[2] = '0';
-  package[3] = '0';
-  package[4] = '0';
+  //
 
-  int delay   = atoi(argv[1]),
-      num_pkg = atoi(argv[2]), n = 0;
+  delay   = atoi(argv[1]);
+  //    num_pkg = atoi(argv[2]), n = 0;
 
-  while (n++ < num_pkg) {
-    //input_file.read(&next_byte, 1);
-    serial_port.write(&package[0], 1);
-    serial_port.write(&package[1], 1);
-    serial_port.write(&package[2], 1);
-    serial_port.write(&package[3], 1);
-    serial_port.write(&package[4], 1);
-    package[4] ++;
-    if (package[4] == '9') { package[4] = '0'; package[3]++; }
-    if (package[3] == '9') { package[3] = '0'; package[2]++; }
-    if (package[2] == '9') { package[2] = '0'; package[1]++; }
-    if (package[1] == '9') {
-      package[1] = '0';
-      package[2] = '0';
-      package[3] = '0';
-      package[4] = '0';
-    }
-    // Print a '.' for every character read from the input file.
-    std::cerr << package << std::endl;
-    usleep(delay);
-  }
+  send_data(  0,  0,  0);
+  send_data(127,  0,  0);
+  send_data(  0,  0,  0);
+  send_data(  0, 127, 0);
+  send_data(  0,  0,  0);
+  send_data(  0,  0, 127);
+  send_data(  0,  0,  0);
 
   return EXIT_SUCCESS;
 }
