@@ -8,7 +8,8 @@
 #include <SerialStream.h>
 #include <fstream>
 
-//#define DEBUG
+#define DEBUG
+#define NO_TX
 
 //
 // Buttons of the DUALSHOCK 3
@@ -132,7 +133,9 @@ int main() {
   }
 
   // transmission
+#ifndef NO_TX
   init_serial();
+#endif
 
   // main loop
   while (true) {
@@ -152,6 +155,7 @@ void send_commands( Robot& robot ) {
   package[3] = robot.v_ang;
   package[4] = 0;
 
+#ifndef NO_TX
   serial_port.write(&package[0], 1);
 
   usleep(TRANSMISSION_DELAY);
@@ -159,11 +163,14 @@ void send_commands( Robot& robot ) {
   serial_port.write(&package[2], 1);
   serial_port.write(&package[3], 1);
   serial_port.write(&package[4], 1);
+#endif
 
-#ifndef DEBUG
+#ifdef DEBUG
     printf( "robot: %f, %f, %f, %i, %i, %i\n",
         robot.v_norm,  robot.v_tan, robot.v_ang,
         robot.kick_x, robot.kick_z, robot.spin );
+#endif
+#ifdef DEBUG_TX
     printf( "package: %c %c %c %c %c\n",
         package[0], package[1], package[2], package[3], package[4] );
 #endif
