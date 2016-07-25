@@ -5,30 +5,27 @@ project(roboime-camera-calibration)
 include_directories("src")
 
 #
-# Joystic test
+# DEPS
 #
-add_executable(demo-joystick
-    src/main.cpp
-    src/joystick.cc
-)
 
 target_link_libraries(demo-joystick serial pthread)
 
 #
+# BIN
+#
+set(COMMON_LIBRARIES
+  serial
+  pthread
+  )
+
+# Joystic test
+add_executable(demo-joystick src/main.cpp src/joystick.cc)
+target_link_libraries(demo-joystick ${COMMON_LIBRARIES})
+
 # My Joystic test
-#
-add_executable(dualshock3-ctl
-    src/dualshock3_ctl.cpp
-    src/joystick.cc
-)
+add_executable(dualshock3-ctl src/dualshock3_ctl.cpp src/joystick.cc)
+target_link_libraries(dualshock3-ctl ${COMMON_LIBRARIES})
 
-target_link_libraries(dualshock3-ctl serial pthread)
-
-#
 # Transmission test
-#
-add_executable(raw-tx
-  src/write_port.cpp
-)
-
+add_executable(raw-tx src/write_port.cpp)
 target_link_libraries(raw-tx serial)
