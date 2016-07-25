@@ -88,7 +88,7 @@ inline void get_joy_values(Joystick &joystick, Robot &robot) {
 #define CHECK_AXIS_EVENT(ev, var) \
   if ((event.isAxis()) && (event.number == ev)) { var = event.value; }
 #define NORMALIZE(dest, var) \
-  if (var <= D3_MAX_VALUE) dest = ((float)var)/ D3_MAX_VALUE;
+  if (var <= D3_MAX_VALUE && var >= D3_MIN_VALUE) dest = ((float)var)/ D3_MAX_VALUE;
 #define SQR(v) (v*v)
 
   if (joystick.sample(&event) && check_event(event.number)) {
