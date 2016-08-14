@@ -30,7 +30,7 @@ Currently the package to control the robot is as follows:
 
 
      +---+-----+-----+---+----------------------------+
-     | a | v_n | v_t | w | reserved for the future... |
+     |'a'| v_n | v_t | w | reserved for the future... |
      +---+-----+-----+---+----------------------------+
 
 where:

@@ -8,8 +8,6 @@ include_directories("src")
 # DEPS
 #
 
-target_link_libraries(demo-joystick serial pthread)
-
 #
 # BIN
 #
@@ -19,8 +17,8 @@ set(COMMON_LIBRARIES
   )
 
 # Joystic test
-add_executable(demo-joystick src/main.cpp src/joystick.cc)
-target_link_libraries(demo-joystick ${COMMON_LIBRARIES})
+#add_executable(demo-joystick src/main.cpp src/joystick.cc)
+#target_link_libraries(demo-joystick ${COMMON_LIBRARIES})
 
 # My Joystic test
 add_executable(dualshock3-ctl src/dualshock3_ctl.cpp src/joystick.cc)

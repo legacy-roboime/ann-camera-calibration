@@ -9,7 +9,14 @@
 #include <fstream>
 
 #define DEBUG
-#define NO_TX
+//#define NO_TX
+
+// XXX: Fix this in the future..
+#define PKG_BUG_FIX        \
+    if (n++ % 700 == 0) {    \
+      serial_port.Close(); \
+      init_serial();       \
+    }
 
 //
 // Buttons of the DUALSHOCK 3
@@ -37,8 +44,9 @@
   serial_port.func(LibSerial::SerialStreamBuf:: value ); \
   CHECK_S(msg)
 
-#define TRANSMISSION_DELAY 1000000 // one second
+#define TRANSMISSION_DELAY 10000 // 10 milli second
 LibSerial::SerialStream serial_port;
+int n=0;
 
 void init_serial() {
   // Open the serial port.
@@ -98,7 +106,8 @@ inline void get_joy_values(Joystick &joystick, Robot &robot) {
 #endif
     CHECK_BUTTON_EVENT( X_BUTTON,   robot.kick_x )
     CHECK_BUTTON_EVENT( TRI_BUTTON, robot.kick_z )
-    CHECK_BUTTON_EVENT( SQR_BUTTON, robot.spin   )
+    //CHECK_BUTTON_EVENT( SQR_BUTTON, robot.spin   )
+    CHECK_BUTTON_EVENT( O_BUTTON, robot.spin   )
 
     CHECK_AXIS_EVENT( X_LEFT_AXIS, x_axis )
     CHECK_AXIS_EVENT( Y_LEFT_AXIS, y_axis )
@@ -143,7 +152,7 @@ int main() {
     send_commands  ( robot );
   }
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 void send_commands( Robot& robot ) {
@@ -163,6 +172,8 @@ void send_commands( Robot& robot ) {
   serial_port.write(&package[2], 1);
   serial_port.write(&package[3], 1);
   serial_port.write(&package[4], 1);
+
+  PKG_BUG_FIX
 #endif
 
 #ifdef DEBUG
